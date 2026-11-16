@@ -47,3 +47,29 @@ button{font:inherit}.app-shell{min-height:100vh}.sidebar{width:246px;position:fi
 .console-next strong{color:#d7f8d0;font-size:16px}
 .console-next p{color:#9ba89a;font-size:14px;line-height:1.45;margin:4px 0 0}
 @media(max-width:850px){.console-grid{grid-template-columns:1fr}.console-card{min-height:0}}
+
+
+.activity-hub{display:grid;gap:16px;margin-top:20px}
+.activity-intro{padding:8px 0 3px}
+.activity-intro h2{font:600 clamp(20px,2.4vw,28px) Orbitron;margin:9px 0;color:#eef5eb}
+.activity-intro p{max-width:800px;color:#929e90;font-size:15px;line-height:1.5;margin:0}
+.activity-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.activity-stat{padding:17px 19px;display:grid;gap:7px}
+.activity-stat>span{font:9px 'Share Tech Mono';letter-spacing:1.2px;color:#899588}
+.activity-stat>strong{font:700 28px Orbitron;color:#eaf4e7}
+.activity-stat>small{font-size:12px;color:#74816f}
+.activity-list{padding:21px}
+.activity-empty{padding:35px 14px;text-align:center;color:#929e90;font-size:14px;line-height:1.5}
+.activity-empty h3{font:600 17px Orbitron;color:#e7efe4;margin:12px 0 7px}
+.activity-empty p{max-width:540px;margin:0 auto}
+.activity-record{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 2px;border-bottom:1px solid #252e25}
+.activity-record:last-child{border-bottom:0}
+.activity-record-main{display:grid;gap:4px;min-width:0}
+.activity-record-main strong{font-size:16px;color:#e6eee3}
+.activity-record-main span,.activity-record-main small,.activity-record-meta>span:first-child{font-size:12px;color:#899588}
+.activity-record-main small{font-family:'Share Tech Mono'}
+.activity-record-meta{display:grid;justify-items:end;gap:7px;white-space:nowrap}
+.verification-tag{font:9px 'Share Tech Mono';letter-spacing:.8px;text-transform:uppercase;padding:5px 7px;border:1px solid #574824;background:#241d0e;color:#e0c77e}
+.verification-tag.verified{border-color:#285a27;background:#10200f;color:#a1ff8c}
+.verification-tag.rejected{border-color:#633232;background:#241010;color:#f09b9b}
+@media(max-width:700px){.activity-summary{grid-template-columns:1fr}.activity-record{align-items:flex-start}.activity-record-meta{white-space:normal;text-align:right}.activity-record-meta>span:first-child{max-width:110px}}
