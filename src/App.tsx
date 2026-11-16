@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   Activity, Award, BarChart3, Bell, ChevronRight, CircleUserRound,
   Gamepad2, Gift, LayoutDashboard, Menu, ShieldCheck, Trophy, Wallet, X
