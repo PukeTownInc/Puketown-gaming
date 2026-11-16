@@ -200,3 +200,19 @@ body{background:#080910;color:#f3f3f7}
 .world-quicklinks button:hover{border-color:#d5ff32;background:#26351d}
 @media(max-width:700px){.world-screen{margin:0 -16px;padding:19px 12px 15px;min-height:calc(100vh - 100px)}.world-topline{align-items:flex-start;flex-direction:column;gap:10px}.world-topline h1{font-size:29px}.world-topline p{font-size:14px}.world-live{padding:7px 9px;font-size:8px}.world-viewport{height:58vh;min-height:390px;max-height:590px}.world-map-label{font-size:7px;left:8px;top:8px}.world-zoom{right:8px;top:8px}.world-zoom button{width:33px;height:33px}.world-bottom{align-items:flex-start;flex-direction:column;margin-top:9px;padding:11px}.world-quicklinks{justify-content:flex-start}.world-quicklinks button{font-size:7px;padding:7px}.world-coordinates{font-size:7px}}
 @media(prefers-reduced-motion:reduce){.world-building{transition:none}}
+
+/* Original Puke Town hub artwork with responsive, accessible navigation hotspots */
+.artwork-world{margin:0 -42px 0;padding:0;background:#080910}
+.artwork-frame{position:relative;width:100%;line-height:0;overflow:hidden;background:#080910}
+.town-artwork{display:block;width:100%;height:auto;aspect-ratio:1672/941;object-fit:contain}
+.artwork-hotspots{position:absolute;inset:0;line-height:normal}
+.artwork-hotspot{position:absolute;display:block;padding:0;margin:0;border:1px solid transparent;border-radius:8px;background:transparent;cursor:pointer;touch-action:manipulation}
+.artwork-hotspot:hover{border-color:#caff35aa;background:#baff3510;box-shadow:inset 0 0 18px #baff3522,0 0 12px #baff3544}
+.artwork-hotspot:focus-visible{outline:3px solid #fff;outline-offset:2px;border-color:#d5ff32;background:#d5ff3220}
+.top-nav-hotspot{top:13.1%;height:6.5%;border-radius:14px}
+.notification-hotspot{right:8.2%;top:.5%;width:5.5%;height:11%}
+.settings-hotspot{right:.4%;top:.5%;width:7%;height:11%}
+.artwork-caption{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 14px;background:#090b13;border:1px solid #a7ff1944;color:#aeb7a7;font:9px "Share Tech Mono";letter-spacing:1px}
+.artwork-caption span:first-child{color:#caff54}
+.artwork-caption i{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#b5ff4a;box-shadow:0 0 9px #b5ff4a}
+@media(max-width:700px){.artwork-world{margin:0 -16px}.artwork-caption{font-size:7px;padding:8px;gap:5px}.artwork-hotspot{border-radius:4px}.top-nav-hotspot{border-radius:6px}}
