@@ -1,0 +1,18 @@
+{
+  "name": "Puke Town Gaming",
+  "short_name": "PT Gaming",
+  "description": "Track gaming progress, achievements and challenges.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#070907",
+  "theme_color": "#080a08",
+  "icons": [
+    {
+      "src": "/puke-town-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
