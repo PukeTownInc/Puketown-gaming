@@ -215,6 +215,50 @@ function AchievementsPanel() {
   );
 }
 
+function LeaderboardsPanel() {
+  const [ranking, setRanking] = useState("xp");
+  const [period, setPeriod] = useState("all-time");
+
+  return (
+    <section className="leaderboard-hub">
+      <div className="leaderboard-intro">
+        <span className="panel-kicker">COMMUNITY RANKINGS</span>
+        <h2>Compete on verified progress.</h2>
+        <p>Leaderboards will rank players using recorded XP and provider-verified achievements. Only eligible, verified activity will count towards competitive standings.</p>
+      </div>
+      <div className="leaderboard-controls">
+        <div className="leaderboard-tabs" role="group" aria-label="Leaderboard category">
+          <button type="button" className={ranking === "xp" ? "selected" : ""} onClick={() => setRanking("xp")}>GAMING XP</button>
+          <button type="button" className={ranking === "achievements" ? "selected" : ""} onClick={() => setRanking("achievements")}>VERIFIED ACHIEVEMENTS</button>
+        </div>
+        <select aria-label="Leaderboard period" value={period} onChange={event => setPeriod(event.target.value)}>
+          <option value="all-time">All time</option>
+          <option value="monthly">This month</option>
+          <option value="weekly">This week</option>
+        </select>
+      </div>
+      <div className="leaderboard-summary">
+        <article className="panel leaderboard-stat"><span>YOUR POSITION</span><strong>—</strong><small>Not ranked yet</small></article>
+        <article className="panel leaderboard-stat"><span>RANKING CATEGORY</span><strong>{ranking === "xp" ? "XP" : "ACH"}</strong><small>{ranking === "xp" ? "Earned gaming experience" : "Verified achievement unlocks"}</small></article>
+        <article className="panel leaderboard-stat"><span>TIME PERIOD</span><strong>{period === "all-time" ? "ALL" : period === "monthly" ? "30D" : "7D"}</strong><small>{period === "all-time" ? "All-time standings" : period === "monthly" ? "Monthly standings" : "Weekly standings"}</small></article>
+      </div>
+      <section className="panel leaderboard-table">
+        <div className="panel-heading"><div><span className="panel-kicker">PLAYER STANDINGS</span><h2>{ranking === "xp" ? "XP leaderboard" : "Achievement leaderboard"}</h2></div><Trophy size={20} /></div>
+        <div className="leaderboard-columns"><span>RANK / PLAYER</span><span>{ranking === "xp" ? "GAMING XP" : "VERIFIED UNLOCKS"}</span></div>
+        <div className="leaderboard-empty">
+          <div className="empty-icon"><Trophy size={25} /></div>
+          <h3>Standings are not live yet</h3>
+          <p>There are no public rankings to display. Leaderboards will go live after player visibility and opt-in rules are in place, and verified XP and achievement data can be served through a privacy-safe ranking service.</p>
+        </div>
+      </section>
+      <div className="panel leaderboard-note">
+        <ShieldCheck size={20} />
+        <div><strong>Fair-play ranking rules</strong><p>Unverified achievements, manually entered playtime and pending reward activity will not count. Player identity will not be exposed publicly without an appropriate visibility choice.</p></div>
+      </div>
+    </section>
+  );
+}
+
 function AccountPanel() {
   const [session, setSession] = useState<any>(null);
   const [email, setEmail] = useState("");
@@ -450,7 +494,9 @@ export default function App() {
               <p>No console accounts, adverts or reward transactions are connected. This preview uses demonstration data only.</p></div>
           </div>
 
-          {active === "Achievements" ? (
+          {active === "Leaderboards" ? (
+            <LeaderboardsPanel />
+          ) : active === "Achievements" ? (
             <AchievementsPanel />
           ) : active === "Gaming activity" ? (
             <GamingActivityPanel />
