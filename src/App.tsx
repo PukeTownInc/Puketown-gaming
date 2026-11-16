@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   Activity, Award, BarChart3, Bell, ChevronRight, CircleUserRound,
   Gamepad2, Gift, LayoutDashboard, Menu, ShieldCheck, Trophy, Wallet, X
@@ -399,6 +399,13 @@ function AccountPanel() {
 }
 
 function TownWorld({ onEnter, playerName }: { onEnter: (page: string) => void; playerName: string }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const viewport = scrollRef.current;
+    if (viewport && window.matchMedia("(max-width: 700px)").matches) {
+      viewport.scrollLeft = (viewport.scrollWidth - viewport.clientWidth) / 2;
+    }
+  }, []);
   const places = [
     { name: "Esports Arena", page: "Leaderboards", x: 11.5, y: 37.5, w: 18, h: 22 },
     { name: "Games Arena", page: "My consoles", x: 27, y: 35, w: 14, h: 19 },
@@ -431,7 +438,7 @@ function TownWorld({ onEnter, playerName }: { onEnter: (page: string) => void; p
   ];
   return (
     <section className="world-screen artwork-world" aria-label="Puke Town interactive home">
-      <div className="artwork-frame">
+      <div className="artwork-scroll" ref={scrollRef} aria-label="Swipe horizontally to explore the town artwork"><div className="artwork-frame">
         <img className="town-artwork" src="/file_0000000010148210831a166c8d49cfce.png" alt="Puke Town Gaming neon city hub with gaming districts and navigation" />
         <div className="artwork-hotspots" aria-label="Town navigation">
           {topNav.map(item => <button key={item.name} className="artwork-hotspot top-nav-hotspot" style={{ left: item.x + "%", width: item.w + "%" }} type="button" aria-label={"Open " + item.name} onClick={() => onEnter(item.page)} />)}
@@ -439,7 +446,7 @@ function TownWorld({ onEnter, playerName }: { onEnter: (page: string) => void; p
           <button className="artwork-hotspot notification-hotspot" type="button" aria-label="Open notifications" onClick={() => onEnter("Gaming activity")} />
           <button className="artwork-hotspot settings-hotspot" type="button" aria-label="Open profile and settings" onClick={() => onEnter("Profile")} />
         </div>
-      </div>
+      </div></div>
       <div className="artwork-caption"><span><i /> TOWN NETWORK ONLINE</span><span>Welcome back, {playerName}</span><span>Tap a district to enter</span></div>
     </section>
   );
