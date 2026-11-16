@@ -216,3 +216,14 @@ body{background:#080910;color:#f3f3f7}
 .artwork-caption span:first-child{color:#caff54}
 .artwork-caption i{display:inline-block;width:7px;height:7px;margin-right:7px;border-radius:50%;background:#b5ff4a;box-shadow:0 0 9px #b5ff4a}
 @media(max-width:700px){.artwork-world{margin:0 -16px}.artwork-caption{font-size:7px;padding:8px;gap:5px}.artwork-hotspot{border-radius:4px}.top-nav-hotspot{border-radius:6px}}
+/* Mobile: keep the full landscape artwork legible and horizontally pannable */
+.artwork-scroll{width:100%;overflow-x:hidden;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#7cff36 #111}
+.artwork-frame{width:100%;max-width:100%}
+@media(max-width:700px){
+  .artwork-world{width:calc(100% + 32px);margin:0 -16px;padding:0;overflow:visible}
+  .artwork-scroll{width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+  .artwork-frame{width:720px;max-width:none;scroll-snap-align:center}
+  .town-artwork{width:720px;height:auto;max-width:none}
+  .artwork-hotspot{min-width:24px;min-height:24px}
+  .artwork-caption{position:relative;margin:0;display:flex;flex-wrap:wrap;justify-content:space-between;line-height:1.4}
+}
