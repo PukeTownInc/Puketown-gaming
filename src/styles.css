@@ -12,3 +12,16 @@ button{font:inherit}.app-shell{min-height:100vh}.sidebar{width:246px;position:fi
 .account-panel{margin:16px 0}.account-panel>.panel-heading{margin-bottom:16px}.account-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.account-form label{display:grid;gap:6px;color:#9eae9b;font:9px 'Share Tech Mono';letter-spacing:1px}.account-form input{width:100%;min-width:0;background:#080c08;border:1px solid #303b30;color:#eef5eb;padding:11px 12px;font:15px Rajdhani;outline:none}.account-form input:focus{border-color:#39ff14;box-shadow:0 0 0 2px #39ff1420}.account-actions{display:flex;align-items:center;gap:13px;flex-wrap:wrap}.account-submit{background:#39ff14;color:#071006;border:0;padding:12px 16px;font:700 10px 'Share Tech Mono';letter-spacing:1px;cursor:pointer}.account-submit:disabled{opacity:.55;cursor:wait}.account-switch{border:0;background:transparent;color:#9eff8b;font:12px Rajdhani;cursor:pointer}.account-message{color:#baffad;font-size:14px;margin:10px 0 0}.account-footnote{grid-column:1/-1;color:#74816f;font-size:12px}.account-signed-in{display:flex;justify-content:space-between;align-items:center;gap:16px}.account-signed-in p,.account-signed-in small{display:block;color:#899588;margin:4px 0}.account-signed-in strong{font-size:17px}.account-signed-in small{font-size:12px}.account-signed-in .account-submit{white-space:nowrap}
 @media(max-width:850px){.account-form{grid-template-columns:1fr 1fr}.account-actions{grid-column:1/-1}}
 @media(max-width:520px){.account-form{grid-template-columns:1fr}.account-actions{grid-column:auto}.account-signed-in{align-items:flex-start;flex-direction:column}}
+
+
+.profile-settings{display:grid;gap:12px}
+.profile-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.profile-form label{display:grid;gap:6px;color:#9eae9b;font:9px 'Share Tech Mono';letter-spacing:1px}
+.profile-form input{width:100%;min-width:0;background:#080c08;border:1px solid #303b30;color:#eef5eb;padding:11px 12px;font:15px Rajdhani;outline:none}
+.profile-form input:focus{border-color:#39ff14;box-shadow:0 0 0 2px #39ff1420}
+.profile-form input[readonly]{color:#849080;background:#0b0f0b}
+.optional-label{color:#74816f;font-size:8px}
+.profile-actions{display:flex;align-items:center;gap:13px;flex-wrap:wrap}
+.profile-feedback{grid-column:1/-1}
+@media(max-width:850px){.profile-form{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.profile-form{grid-template-columns:1fr}}
