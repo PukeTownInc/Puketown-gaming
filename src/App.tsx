@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   Activity, Award, BarChart3, Bell, ChevronRight, CircleUserRound,
   Gamepad2, Gift, LayoutDashboard, Menu, ShieldCheck, Trophy, Wallet, X
@@ -33,7 +33,7 @@ function AccountPanel() {
     return () => data.subscription.unsubscribe();
   }, []);
 
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!supabase) return;
     setBusy(true);
