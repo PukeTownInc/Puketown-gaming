@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   Activity, Award, BarChart3, Bell, ChevronRight, CircleUserRound,
   Gamepad2, Gift, LayoutDashboard, Menu, ShieldCheck, Trophy, Wallet, X
@@ -398,6 +398,74 @@ function AccountPanel() {
   );
 }
 
+function TownWorld({ onEnter, playerName }: { onEnter: (page: string) => void; playerName: string }) {
+  const [zoom, setZoom] = useState(1);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [selected, setSelected] = useState("TOWN SQUARE");
+  const drag = useRef<{x:number;y:number;ox:number;oy:number}|null>(null);
+  const places = [
+    {name:"GAMES ARENA",page:"My consoles",x:180,y:300,color:"#a7ff19",kind:"arena"},
+    {name:"PLAYER HQ",page:"Dashboard",x:470,y:175,color:"#d5ff32",kind:"hq"},
+    {name:"ACHIEVEMENT HALL",page:"Achievements",x:740,y:290,color:"#bd69ff",kind:"hall"},
+    {name:"LEADERBOARD TOWER",page:"Leaderboards",x:870,y:465,color:"#ffcf45",kind:"tower"},
+    {name:"CHALLENGE YARD",page:"Challenges",x:535,y:485,color:"#ff6a45",kind:"yard"},
+    {name:"THE VAULT",page:"Wallet",x:270,y:510,color:"#52e6db",kind:"vault"},
+    {name:"REWARD BAZAAR",page:"Rewards shop",x:680,y:590,color:"#ff6ab5",kind:"bazaar"},
+    {name:"AFTER ACTION",page:"Gaming activity",x:90,y:565,color:"#8db6ff",kind:"after"}
+  ];
+  const startDrag = (e: React.PointerEvent<SVGSVGElement>) => {
+    if ((e.target as Element).closest("[data-place]")) return;
+    drag.current = {x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y};
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const moveDrag = (e: React.PointerEvent<SVGSVGElement>) => {
+    if (!drag.current) return;
+    setOffset({x:Math.max(-220,Math.min(220,drag.current.ox+(e.clientX-drag.current.x)*.65)),y:Math.max(-130,Math.min(130,drag.current.oy+(e.clientY-drag.current.y)*.65))});
+  };
+  const endDrag = () => { drag.current = null; };
+  return <section className="world-screen">
+    <div className="world-topline"><div><span className="world-kicker">PUKE TOWN · OPEN WORLD NETWORK</span><h1>THE CITY IS <em>ALIVE.</em></h1><p>Welcome back, {playerName}. Choose a district and enter the world.</p></div><div className="world-live"><i/> CITY GRID ONLINE <b>SECTOR 01</b></div></div>
+    <div className="world-viewport">
+      <div className="world-sky"><span className="sky-moon"/><span className="sky-haze haze-one"/><span className="sky-haze haze-two"/><span className="sky-scanline"/></div>
+      <svg className="town-map" viewBox="0 0 1000 720" role="img" aria-label="Interactive isometric map of Puke Town. Drag to explore and tap a building to enter its district." onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag}>
+        <g transform={`translate(${offset.x} ${offset.y}) translate(500 360) scale(${zoom}) translate(-500 -360)`}>
+          <defs>
+            <linearGradient id="ground" x2="0" y2="1"><stop stopColor="#27302a"/><stop offset="1" stopColor="#111820"/></linearGradient>
+            <linearGradient id="road" x2="0" y2="1"><stop stopColor="#30333a"/><stop offset="1" stopColor="#171b23"/></linearGradient>
+            <linearGradient id="tower" x2="1" y2="1"><stop stopColor="#55406a"/><stop offset="1" stopColor="#1c2430"/></linearGradient>
+            <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <path d="M500 80 L950 320 L500 680 L50 320Z" fill="url(#ground)" stroke="#a7ff1944" strokeWidth="2"/>
+          <path d="M500 155 L880 355 L500 570 L120 355Z" fill="#18221e" stroke="#49603b" strokeWidth="2"/>
+          <path d="M500 80 L500 680 M50 320 L950 320 M120 355 L500 570 L880 355 M500 155 L120 355" stroke="#a7ff1927" strokeWidth="2" strokeDasharray="8 12"/>
+          <path d="M500 180 L500 610 M150 355 L850 355" stroke="url(#road)" strokeWidth="74" fill="none"/>
+          <path d="M500 180 L500 610 M150 355 L850 355" stroke="#a7ff1970" strokeWidth="2" strokeDasharray="13 16" fill="none"/>
+          <path d="M500 180 L500 610 M150 355 L850 355" stroke="#e2d85c22" strokeWidth="36" fill="none"/>
+          {Array.from({length:16},(_,i)=><circle key={i} cx={90+(i*53)%820} cy={170+(i*79)%470} r={i%3===0?5:2.5} fill={i%2?"#b5ff43":"#a45cff"} opacity=".7"/>)}
+          <g opacity=".8"><path d="M90 280 l40 -22 0 55 -40 22z M820 215 l55 -30 0 70 -55 30z M750 510 l42 -24 0 54 -42 24z" fill="#303947" stroke="#a7ff1977"/><path d="M90 280 l40 -22 M820 215 l55 -30 M750 510 l42 -24" stroke="#c9ff4d" strokeWidth="3"/></g>
+          {places.map((p,i)=><g key={p.name} data-place="true" className="world-building" role="button" tabIndex={0} aria-label={`Enter ${p.name}`} onClick={()=>{setSelected(p.name);onEnter(p.page);}} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelected(p.name);onEnter(p.page);}}} transform={`translate(${p.x} ${p.y})`}>
+            <ellipse cx="0" cy="22" rx="85" ry="28" fill={p.color} opacity=".13" filter="url(#glow)"/>
+            {p.kind==="tower" ? <><path d="M-48 8 L-38 -130 L0 -158 L38 -130 L48 8Z" fill="url(#tower)" stroke={p.color} strokeWidth="2"/><path d="M-38 -130 L0 -158 L38 -130 L0 -105Z" fill="#a77bd0"/><path d="M-38 -130 L-38 8 M0 -105 L0 8 M38 -130 L38 8" stroke={p.color} opacity=".7"/><path d="M-24 -75 H24 M-26 -35 H26" stroke={p.color} strokeWidth="5" filter="url(#glow)"/></>
+            : <><path d="M-65 -4 L-65 -72 L0 -108 L65 -72 L65 -4 L0 34Z" fill="#252b35" stroke={p.color} strokeWidth="2"/><path d="M-65 -72 L0 -108 L65 -72 L0 -34Z" fill="#53604e"/><path d="M0 -34 L65 -72 L65 -4 L0 34Z" fill="#161e27"/><path d="M-65 -72 L0 -34 L0 34 L-65 -4Z" fill="#333d3b"/><path d="M-38 -64 L0 -86 L38 -64 L0 -43Z" fill={p.color} opacity=".65"/><path d="M-45 -2 V-45 L-25 -56 V-12 M14 -16 V-49 L34 -60 V-27" stroke={p.color} strokeWidth="4" filter="url(#glow)"/></>}
+            <path d="M-70 13 L0 53 L70 13 L0 -27Z" fill="#0d1117" stroke={p.color} strokeWidth="1.5"/>
+            <path d="M-70 13 L0 53 L0 65 L-70 25Z M0 53 L70 13 L70 25 L0 65Z" fill="#303842" stroke={p.color} strokeWidth=".7"/>
+            <rect x="-58" y="-123" width="116" height="24" rx="3" fill="#080b10" stroke={p.color}/>
+            <text x="0" y="-107" textAnchor="middle" fill={p.color} fontSize="10" fontWeight="bold" letterSpacing="1.1">{p.name}</text>
+            <circle cx="0" cy="0" r="5" fill={p.color} filter="url(#glow)"/>
+            <path d="M0 55 V78" stroke={p.color} strokeDasharray="3 4" opacity=".7"/>
+          </g>)}
+          <g transform="translate(500 350)"><circle r="22" fill="#d5ff321a" stroke="#d5ff32" strokeWidth="1.5"/><circle r="6" fill="#d5ff32" filter="url(#glow)"/><path d="M0 -35 V-23 M0 23 V35 M-35 0 H-23 M23 0 H35" stroke="#d5ff32" strokeWidth="2"/></g>
+          <text x="500" y="690" textAnchor="middle" fill="#b6ca9d" fontSize="10" letterSpacing="4">PUKE TOWN CENTRAL GRID · MAP DATA V1</text>
+        </g>
+      </svg>
+      <div className="world-map-label">DRAG TO PAN <span>·</span> TAP A BUILDING TO ENTER</div>
+      <div className="world-zoom"><button onClick={()=>setZoom(z=>Math.min(1.45,z+.1))} aria-label="Zoom in">+</button><button onClick={()=>setZoom(z=>Math.max(.75,z-.1))} aria-label="Zoom out">−</button><button onClick={()=>{setZoom(1);setOffset({x:0,y:0});}} aria-label="Reset map">⌖</button></div>
+      <div className="world-coordinates"><span>MAP / PT-01</span><span>8 DISTRICTS DISCOVERED</span></div>
+    </div>
+    <div className="world-bottom"><div><span className="world-kicker">CURRENT LOCATION</span><strong>{selected}</strong></div><div className="world-quicklinks">{places.slice(0,4).map(p=><button key={p.name} onClick={()=>{setSelected(p.name);onEnter(p.page);}}>{p.name}</button>)}</div></div>
+  </section>;
+}
+
 export default function App() {
   const [active, setActive] = useState("Dashboard");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -482,20 +550,20 @@ export default function App() {
 
         <section className="page-content">
           <div className="eyebrow"><span className="eyebrow-line" /> GAMING REWARDS PLATFORM</div>
-          {active === "Dashboard" && <><section className="town-hero"><div className="town-hero-content"><span className="panel-kicker">WELCOME TO THE WASTELANDS · SECTOR 01</span><h1>ENTER <em>PUKE TOWN</em></h1><p>Your gaming universe. One identity. A world of challenges, achievements and rewards.</p><button type="button" onClick={() => setActive("My consoles")}>EXPLORE THE GAMES ARENA <ChevronRight size={16}/></button></div><div className="town-hero-stamp">PT<br/><small>RADIOACTIVE GAMING ZONE</small></div></section><div className="district-heading"><div><span className="panel-kicker">THE CITY IS YOURS TO EXPLORE</span><h2>Choose your destination</h2></div><span className="district-live">● TOWN SYSTEMS ONLINE</span></div><section className="district-grid">{[{name:"GAMES ARENA",desc:"Your gaming platforms",page:"My consoles",symbol:"▣"},{name:"PLAYER HQ",desc:"Your account and identity",page:"Dashboard",symbol:"⌂"},{name:"ACHIEVEMENT HALL",desc:"Trophies and unlocks",page:"Achievements",symbol:"✦"},{name:"LEADERBOARD TOWER",desc:"Verified player rankings",page:"Leaderboards",symbol:"♜"},{name:"CHALLENGE YARD",desc:"Daily and weekly objectives",page:"Challenges",symbol:"⚑"},{name:"THE VAULT",desc:"XP and reward balances",page:"Wallet",symbol:"⬡"},{name:"REWARD BAZAAR",desc:"Future rewards marketplace",page:"Rewards shop",symbol:"◇"},{name:"AFTER ACTION",desc:"Your gaming sessions",page:"Gaming activity",symbol:"◷"}].map(d=><button type="button" className="district-card" key={d.name} onClick={() => setActive(d.page)}><span className="district-symbol">{d.symbol}</span><b>{d.name}</b><small>{d.desc}</small><span className="district-enter">ENTER DISTRICT →</span></button>)}</section></>}
-          <div className="page-heading">
+          {active === "Dashboard" && null}
+          {active !== "Dashboard" && <div className="page-heading">
             <div><h1>{active === "Dashboard" ? "Your gaming command centre." : active}</h1>
               <p>Track progress. Complete challenges. Build your player profile.</p></div>
             <div className="player-chip"><div className="avatar">PT</div><div><strong>{playerData.displayName}</strong><span>{playerData.signedIn ? "ACCOUNT CONNECTED" : "Not connected"}</span></div></div>
           </div>
 
-          <div className="notice">
+          {active !== "Dashboard" && <div className="notice">
             <ShieldCheck size={20} />
             <div><strong>Foundation mode — integrations are disabled</strong>
               <p>No console accounts, adverts or reward transactions are connected. This preview uses demonstration data only.</p></div>
           </div>
 
-          {active === "Leaderboards" ? (
+          {active === "Dashboard" ? (\n            <TownWorld onEnter={setActive} playerName={playerData.displayName} />\n          ) : active === "Leaderboards" ? (
             <LeaderboardsPanel />
           ) : active === "Achievements" ? (
             <AchievementsPanel />
