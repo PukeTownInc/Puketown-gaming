@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Activity, Award, BarChart3, Bell, ChevronRight, CircleUserRound,
   Gamepad2, Gift, LayoutDashboard, Menu, ShieldCheck, Trophy, Wallet, X
 } from "lucide-react";
-import { isSupabaseConfigured } from "./lib/supabase";
+import { isSupabaseConfigured, supabase } from "./lib/supabase";
 
 const navigation = [
   { label: "Dashboard", icon: LayoutDashboard },
@@ -15,6 +15,85 @@ const navigation = [
   { label: "Wallet", icon: Wallet },
   { label: "Rewards shop", icon: Gift }
 ];
+
+
+function AccountPanel() {
+  const [session, setSession] = useState<any>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [mode, setMode] = useState<"signup" | "signin">("signup");
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (!supabase) return;
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data } = supabase.auth.onAuthStateChange((_event, next) => setSession(next));
+    return () => data.subscription.unsubscribe();
+  }, []);
+
+  async function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!supabase) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { display_name: displayName.trim() || email.split("@")[0] } }
+        });
+        if (error) throw error;
+        setMessage(data.session ? "Account created. Your player profile is ready." : "Registration received. Check your email to confirm your account.");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        setMessage("Signed in successfully.");
+      }
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Account request failed.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function signOut() {
+    if (!supabase) return;
+    const { error } = await supabase.auth.signOut();
+    setMessage(error ? error.message : "Signed out.");
+  }
+
+  return (
+    <section className="panel account-panel">
+      <div className="panel-heading">
+        <div><span className="panel-kicker">PLAYER ACCOUNT</span><h2>{session ? "Your account" : "Create your player account"}</h2></div>
+        <CircleUserRound size={21} />
+      </div>
+      {!isSupabaseConfigured ? (
+        <p className="account-message">Account services are unavailable until Supabase environment variables are configured.</p>
+      ) : session ? (
+        <div className="account-signed-in">
+          <div><strong>{session.user.user_metadata?.display_name || session.user.email}</strong><p>{session.user.email}</p><small>Your player profile is linked to this account.</small></div>
+          <button className="account-submit" onClick={signOut}>SIGN OUT</button>
+        </div>
+      ) : (
+        <form className="account-form" onSubmit={submit}>
+          {mode === "signup" && <label>PLAYER NAME<input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Choose a display name" maxLength={40} /></label>}
+          <label>EMAIL ADDRESS<input type="email" required value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" autoComplete="email" /></label>
+          <label>PASSWORD<input type="password" required minLength={8} value={password} onChange={e => setPassword(e.target.value)} placeholder="At least 8 characters" autoComplete={mode === "signup" ? "new-password" : "current-password"} /></label>
+          <div className="account-actions">
+            <button className="account-submit" type="submit" disabled={busy}>{busy ? "PLEASE WAIT..." : mode === "signup" ? "CREATE ACCOUNT" : "SIGN IN"}</button>
+            <button className="account-switch" type="button" onClick={() => { setMode(mode === "signup" ? "signin" : "signup"); setMessage(""); }}>{mode === "signup" ? "Already registered? Sign in" : "Need an account? Register"}</button>
+          </div>
+          {message && <p className="account-message" role="status">{message}</p>}
+          <small className="account-footnote">Player profiles are created automatically after registration. Console linking and rewards remain disabled.</small>
+        </form>
+      )}
+    </section>
+  );
+}
 
 export default function App() {
   const [active, setActive] = useState("Dashboard");
@@ -64,7 +143,7 @@ export default function App() {
               <p>No console accounts, adverts or reward transactions are connected. This preview uses demonstration data only.</p></div>
           </div>
 
-          <div className="stat-grid">
+          <AccountPanel />\n\n          <div className="stat-grid">
             <article className="stat-card"><div className="stat-icon"><Trophy /></div><span>GAMING XP</span><strong>0 <small>XP</small></strong><p>Progression points only</p></article>
             <article className="stat-card"><div className="stat-icon"><Wallet /></div><span>REWARD CREDITS</span><strong>0 <small>RC</small></strong><p>Redeemable balance</p></article>
             <article className="stat-card"><div className="stat-icon"><Gamepad2 /></div><span>LINKED CONSOLES</span><strong>0</strong><p>Connections not enabled</p></article>
