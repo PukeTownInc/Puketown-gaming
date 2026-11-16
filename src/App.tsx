@@ -555,7 +555,7 @@ export default function App() {
             <div><h1>{active === "Dashboard" ? "Your gaming command centre." : active}</h1>
               <p>Track progress. Complete challenges. Build your player profile.</p></div>
             <div className="player-chip"><div className="avatar">PT</div><div><strong>{playerData.displayName}</strong><span>{playerData.signedIn ? "ACCOUNT CONNECTED" : "Not connected"}</span></div></div>
-          </div>
+          </div>}
 
           {active !== "Dashboard" && <div className="notice">
             <ShieldCheck size={20} />
