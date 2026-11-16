@@ -164,3 +164,39 @@ body{background:#080910;color:#f3f3f7}
 .panel h2{color:#f3f3f7}
 @media(max-width:1000px){.district-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.page-content{padding:25px 16px 18px}.town-hero{margin:0 -16px 20px;height:350px;background-position:57% center}.town-hero-content{padding:60px 20px}.town-hero h1{font-size:34px;letter-spacing:-1px}.town-hero p{font-size:15px;max-width:280px}.town-hero-stamp{right:13px;top:13px;width:70px;height:70px;font-size:22px}.town-hero-stamp small{font-size:5px}.district-heading{align-items:flex-start;flex-direction:column}.district-heading h2{font-size:18px}.district-grid{gap:8px}.district-card{min-height:145px;padding:12px 9px}.district-symbol{font-size:35px;margin-bottom:4px}.district-card b{font-size:8px}.district-card small{font-size:10px}.district-enter{font-size:6px}}
+
+
+/* Full-screen interactive isometric Puke Town */
+.world-screen{margin:4px -42px 0;min-height:calc(100vh - 150px);padding:24px 28px 20px;background:radial-gradient(ellipse at 48% 35%,#39204d 0%,#171421 42%,#090d13 100%);border-top:1px solid #b4ff3633;overflow:hidden}
+.world-topline{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:0 auto 17px;max-width:1500px}
+.world-kicker{font:10px 'Share Tech Mono';letter-spacing:2px;color:#b6ff53}
+.world-topline h1{font:800 clamp(28px,4vw,48px) Orbitron;margin:8px 0 5px;color:#f7f7ef;letter-spacing:-1.5px}
+.world-topline h1 em{font-style:normal;color:#d5ff32;text-shadow:0 0 20px #b5ff4a66}
+.world-topline p{margin:0;color:#b8b6c3;font-size:16px}
+.world-live{display:flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid #b5ff4a55;background:#0b1114;color:#d5ff32;font:9px 'Share Tech Mono';letter-spacing:1px;white-space:nowrap}
+.world-live i{width:7px;height:7px;border-radius:50%;background:#b5ff4a;box-shadow:0 0 12px #b5ff4a}
+.world-live b{color:#a6a0b4;font-weight:400;border-left:1px solid #55505f;padding-left:9px}
+.world-viewport{position:relative;max-width:1500px;height:min(67vh,690px);min-height:440px;margin:auto;overflow:hidden;border:1px solid #a7ff194d;background:linear-gradient(145deg,#18182a,#101b20 65%,#14101f);box-shadow:0 22px 65px #0009,inset 0 0 80px #8d40a51c;touch-action:none}
+.world-sky{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 18%,#7b4d9b55,transparent 48%),linear-gradient(180deg,#17172b 0%,#22202c 50%,#18211e 100%);pointer-events:none}
+.sky-moon{position:absolute;right:15%;top:9%;width:72px;height:72px;border-radius:50%;background:#d5ff32;opacity:.7;box-shadow:0 0 45px #d5ff3266}
+.sky-haze{position:absolute;left:-5%;right:-5%;height:140px;background:#a34cc1;filter:blur(55px);opacity:.16;border-radius:50%}
+.haze-one{top:30%}.haze-two{top:55%;background:#9dff36;opacity:.08}
+.sky-scanline{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#d5ff3208 6px,transparent 7px 10px);opacity:.6}
+.town-map{position:absolute;inset:0;width:100%;height:100%;cursor:grab;touch-action:none}
+.town-map:active{cursor:grabbing}
+.world-building{cursor:pointer;outline:none;transition:filter .15s}
+.world-building:hover,.world-building:focus{filter:brightness(1.35) drop-shadow(0 0 9px #caff5b)}
+.world-building:focus path{stroke-width:3}
+.world-map-label{position:absolute;left:15px;top:14px;padding:8px 10px;background:#090d13c9;border:1px solid #b5ff4a44;color:#d7e5c8;font:9px 'Share Tech Mono';letter-spacing:1px;pointer-events:none}
+.world-map-label span{color:#d5ff32;padding:0 5px}
+.world-zoom{position:absolute;right:14px;top:14px;display:grid;gap:5px}
+.world-zoom button{width:37px;height:37px;background:#0a1014e8;border:1px solid #b5ff4a66;color:#d5ff32;font:20px 'Share Tech Mono';cursor:pointer}
+.world-zoom button:active{background:#30421b}
+.world-coordinates{position:absolute;bottom:12px;left:14px;right:14px;display:flex;justify-content:space-between;color:#b7c3ae;font:8px 'Share Tech Mono';letter-spacing:1px;pointer-events:none;text-shadow:0 1px 5px #000}
+.world-bottom{max-width:1500px;margin:14px auto 0;display:flex;justify-content:space-between;align-items:center;gap:15px;padding:13px 16px;background:#0b1015;border:1px solid #9aff3333}
+.world-bottom>div:first-child{display:grid;gap:5px}.world-bottom strong{font:13px Orbitron;color:#f0f5e8}
+.world-quicklinks{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.world-quicklinks button{border:1px solid #5d6c43;background:#172019;color:#cfff7a;padding:8px 10px;font:8px 'Share Tech Mono';letter-spacing:.5px;cursor:pointer}
+.world-quicklinks button:hover{border-color:#d5ff32;background:#26351d}
+@media(max-width:700px){.world-screen{margin:0 -16px;padding:19px 12px 15px;min-height:calc(100vh - 100px)}.world-topline{align-items:flex-start;flex-direction:column;gap:10px}.world-topline h1{font-size:29px}.world-topline p{font-size:14px}.world-live{padding:7px 9px;font-size:8px}.world-viewport{height:58vh;min-height:390px;max-height:590px}.world-map-label{font-size:7px;left:8px;top:8px}.world-zoom{right:8px;top:8px}.world-zoom button{width:33px;height:33px}.world-bottom{align-items:flex-start;flex-direction:column;margin-top:9px;padding:11px}.world-quicklinks{justify-content:flex-start}.world-quicklinks button{font-size:7px;padding:7px}.world-coordinates{font-size:7px}}
+@media(prefers-reduced-motion:reduce){.world-building{transition:none}}
