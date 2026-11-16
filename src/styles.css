@@ -227,3 +227,27 @@ body{background:#080910;color:#f3f3f7}
   .artwork-hotspot{min-width:24px;min-height:24px}
   .artwork-caption{position:relative;margin:0;display:flex;flex-wrap:wrap;justify-content:space-between;line-height:1.4}
 }
+/* Portrait-first town navigation for phones */
+.portrait-town{display:none}
+@media(max-width:700px){
+  .artwork-world{width:100%;margin:0;padding:0;background:#080910}
+  .artwork-scroll{display:none}
+  .portrait-town{display:block;padding:0 0 16px}
+  .portrait-town-hero{height:clamp(210px,58vw,310px);position:relative;overflow:hidden;border:1px solid #9aff3344;background:#090d0b}
+  .portrait-town-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#080b08 0%,rgba(8,11,8,.22) 70%,rgba(8,11,8,.05) 100%)}
+  .portrait-town-hero img{width:100%;height:100%;object-fit:cover;object-position:50% 43%;display:block}
+  .portrait-town-overlay{position:absolute;z-index:1;left:16px;right:16px;bottom:17px}
+  .portrait-live{font:9px 'Share Tech Mono';letter-spacing:1.2px;color:#caff62}
+  .portrait-live i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#baff38;box-shadow:0 0 9px #baff38;margin-right:7px}
+  .portrait-town-overlay h2{font:800 clamp(23px,7vw,32px) Orbitron;letter-spacing:1px;color:#f2ffe9;margin:8px 0 2px;text-shadow:0 0 15px #75ff3c55}
+  .portrait-town-overlay p{font:13px Rajdhani;color:#d2dec9;margin:0}
+  .portrait-town-section{padding:17px 12px 0}
+  .portrait-section-kicker{display:block;font:9px 'Share Tech Mono';letter-spacing:1.6px;color:#9be77c;margin:0 0 11px 2px}
+  .portrait-district-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .portrait-district{min-height:58px;display:flex;align-items:center;gap:9px;padding:10px 9px;background:linear-gradient(145deg,#151d13,#0b100b);border:1px solid #38472e;border-radius:5px;color:#edf5e8;text-align:left;font:600 13px Rajdhani;cursor:pointer;touch-action:manipulation}
+  .portrait-district:active{background:#20301a;border-color:#baff38;transform:scale(.985)}
+  .portrait-district-number{font:9px 'Share Tech Mono';color:#aaff43;opacity:.85}
+  .portrait-district b{margin-left:auto;color:#aaff43;font-size:16px;font-weight:400}
+  .artwork-caption{font-size:8px;padding:9px 10px;flex-wrap:wrap;line-height:1.5}
+}
+@media(max-width:360px){.portrait-district{font-size:12px;gap:6px;padding:9px 7px}.portrait-town-section{padding-left:8px;padding-right:8px}}
