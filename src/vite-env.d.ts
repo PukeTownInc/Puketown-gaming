@@ -12,3 +12,7 @@ interface ImportMeta {
     readonly MODE: string;
   };
 }
+
+interface Navigator {
+  readonly serviceWorker: ServiceWorkerContainer;
+}
