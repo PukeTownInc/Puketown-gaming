@@ -447,6 +447,15 @@ function TownWorld({ onEnter, playerName }: { onEnter: (page: string) => void; p
           <button className="artwork-hotspot settings-hotspot" type="button" aria-label="Open profile and settings" onClick={() => onEnter("Profile")} />
         </div>
       </div></div>
+      <div className="portrait-town">
+        <div className="portrait-town-hero">
+          <img src="/file_0000000010148210831a166c8d49cfce.png" alt="Puke Town neon city" />
+          <div className="portrait-town-overlay"><span className="portrait-live"><i /> TOWN NETWORK ONLINE</span><h2>PUKE TOWN</h2><p>Choose your destination</p></div>
+        </div>
+        <div className="portrait-town-section"><span className="portrait-section-kicker">EXPLORE THE CITY</span><div className="portrait-district-grid">
+          {places.map((item, index) => <button key={item.name} type="button" className="portrait-district" onClick={() => onEnter(item.page)}><span className="portrait-district-number">{String(index + 1).padStart(2, "0")}</span><span>{item.name}</span><b>↗</b></button>)}
+        </div></div>
+      </div>
       <div className="artwork-caption"><span><i /> TOWN NETWORK ONLINE</span><span>Welcome back, {playerName}</span><span>Tap a district to enter</span></div>
     </section>
   );
