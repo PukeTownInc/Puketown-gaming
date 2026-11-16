@@ -35,6 +35,7 @@ button{font:inherit}.app-shell{min-height:100vh}.sidebar{width:246px;position:fi
 .console-brand{display:flex;align-items:center;gap:13px;padding-bottom:18px;border-bottom:1px solid #252e25}
 .console-symbol{width:48px;height:48px;display:grid;place-items:center;font:700 17px Orbitron;border:1px solid #365b30;background:#142012;color:#a1ff8c}
 .ps-symbol{font-size:14px;color:#c4d8ff;border-color:#344665;background:#101827}
+.steam-symbol{font-size:23px;color:#dce5ef;border-color:#46515e;background:#151b22}
 .console-brand h3{font:700 21px Orbitron;margin:5px 0 0}
 .console-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:17px 0 9px}
 .status-pill{font:9px 'Share Tech Mono';letter-spacing:1px;padding:6px 8px;border:1px solid #574824;color:#e0c77e;background:#241d0e}
