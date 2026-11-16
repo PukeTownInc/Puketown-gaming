@@ -274,6 +274,13 @@ export default function App() {
                   <ul><li>Player identity where permitted</li><li>Supported trophy data</li><li>Eligible gaming activity data</li></ul>
                   <button className="console-disabled" type="button" disabled>CONNECT PLAYSTATION — COMING LATER</button>
                 </article>
+                <article className="panel console-card console-steam">
+                  <div className="console-brand"><span className="console-symbol steam-symbol">S</span><div><span className="panel-kicker">THIRD PLATFORM</span><h3>Steam</h3></div></div>
+                  <div className="console-status"><span className="status-pill pending">NOT CONNECTED</span><span className="status-detail">Connection unavailable</span></div>
+                  <p>Steam is now included in the platform roadmap. Account linking will use an approved Steam sign-in method, with profile visibility and available data checked before any activity is treated as verified.</p>
+                  <ul><li>Steam account identity and profile</li><li>Public game and achievement data where available</li><li>Eligible activity data, subject to verification</li></ul>
+                  <button className="console-disabled" type="button" disabled>CONNECT STEAM — COMING LATER</button>
+                </article>
               </div>
               <div className="panel console-next">
                 <ShieldCheck size={20} />
