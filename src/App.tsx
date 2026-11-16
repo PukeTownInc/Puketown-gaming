@@ -399,71 +399,50 @@ function AccountPanel() {
 }
 
 function TownWorld({ onEnter, playerName }: { onEnter: (page: string) => void; playerName: string }) {
-  const [zoom, setZoom] = useState(1);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const [selected, setSelected] = useState("TOWN SQUARE");
-  const drag = useRef<{x:number;y:number;ox:number;oy:number}|null>(null);
   const places = [
-    {name:"GAMES ARENA",page:"My consoles",x:180,y:300,color:"#a7ff19",kind:"arena"},
-    {name:"PLAYER HQ",page:"Dashboard",x:470,y:175,color:"#d5ff32",kind:"hq"},
-    {name:"ACHIEVEMENT HALL",page:"Achievements",x:740,y:290,color:"#bd69ff",kind:"hall"},
-    {name:"LEADERBOARD TOWER",page:"Leaderboards",x:870,y:465,color:"#ffcf45",kind:"tower"},
-    {name:"CHALLENGE YARD",page:"Challenges",x:535,y:485,color:"#ff6a45",kind:"yard"},
-    {name:"THE VAULT",page:"Wallet",x:270,y:510,color:"#52e6db",kind:"vault"},
-    {name:"REWARD BAZAAR",page:"Rewards shop",x:680,y:590,color:"#ff6ab5",kind:"bazaar"},
-    {name:"AFTER ACTION",page:"Gaming activity",x:90,y:565,color:"#8db6ff",kind:"after"}
+    { name: "Esports Arena", page: "Leaderboards", x: 11.5, y: 37.5, w: 18, h: 22 },
+    { name: "Games Arena", page: "My consoles", x: 27, y: 35, w: 14, h: 19 },
+    { name: "Player HQ", page: "Dashboard", x: 43, y: 28, w: 14, h: 20 },
+    { name: "Earn Hub", page: "Rewards shop", x: 62, y: 34, w: 14, h: 20 },
+    { name: "Marketplace", page: "Rewards shop", x: 82, y: 34, w: 16, h: 20 },
+    { name: "The Docks", page: "My consoles", x: 10, y: 54, w: 10, h: 15 },
+    { name: "AI Lab", page: "Challenges", x: 23, y: 51, w: 15, h: 17 },
+    { name: "The Vault", page: "Wallet", x: 68, y: 51, w: 13, h: 18 },
+    { name: "Leaderboards", page: "Leaderboards", x: 82, y: 56, w: 16, h: 15 },
+    { name: "Profile", page: "Profile", x: 3, y: 85, w: 11, h: 12 },
+    { name: "My Consoles", page: "My consoles", x: 14, y: 85, w: 11, h: 12 },
+    { name: "Activity", page: "Gaming activity", x: 25, y: 85, w: 11, h: 12 },
+    { name: "Achievements", page: "Achievements", x: 36, y: 85, w: 11, h: 12 },
+    { name: "Explore Puke Town", page: "Dashboard", x: 43, y: 82, w: 14, h: 16 },
+    { name: "Wallet", page: "Wallet", x: 57, y: 85, w: 11, h: 12 },
+    { name: "Inventory", page: "Rewards shop", x: 68, y: 85, w: 11, h: 12 },
+    { name: "Clans", page: "Challenges", x: 79, y: 85, w: 10, h: 12 },
+    { name: "Settings", page: "Profile", x: 89, y: 85, w: 9, h: 12 }
   ];
-  const startDrag = (e: React.PointerEvent<SVGSVGElement>) => {
-    if ((e.target as Element).closest("[data-place]")) return;
-    drag.current = {x:e.clientX,y:e.clientY,ox:offset.x,oy:offset.y};
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-  const moveDrag = (e: React.PointerEvent<SVGSVGElement>) => {
-    if (!drag.current) return;
-    setOffset({x:Math.max(-220,Math.min(220,drag.current.ox+(e.clientX-drag.current.x)*.65)),y:Math.max(-130,Math.min(130,drag.current.oy+(e.clientY-drag.current.y)*.65))});
-  };
-  const endDrag = () => { drag.current = null; };
-  return <section className="world-screen">
-    <div className="world-topline"><div><span className="world-kicker">PUKE TOWN · OPEN WORLD NETWORK</span><h1>THE CITY IS <em>ALIVE.</em></h1><p>Welcome back, {playerName}. Choose a district and enter the world.</p></div><div className="world-live"><i/> CITY GRID ONLINE <b>SECTOR 01</b></div></div>
-    <div className="world-viewport">
-      <div className="world-sky"><span className="sky-moon"/><span className="sky-haze haze-one"/><span className="sky-haze haze-two"/><span className="sky-scanline"/></div>
-      <svg className="town-map" viewBox="0 0 1000 720" role="img" aria-label="Interactive isometric map of Puke Town. Drag to explore and tap a building to enter its district." onPointerDown={startDrag} onPointerMove={moveDrag} onPointerUp={endDrag} onPointerCancel={endDrag}>
-        <g transform={`translate(${offset.x} ${offset.y}) translate(500 360) scale(${zoom}) translate(-500 -360)`}>
-          <defs>
-            <linearGradient id="ground" x2="0" y2="1"><stop stopColor="#27302a"/><stop offset="1" stopColor="#111820"/></linearGradient>
-            <linearGradient id="road" x2="0" y2="1"><stop stopColor="#30333a"/><stop offset="1" stopColor="#171b23"/></linearGradient>
-            <linearGradient id="tower" x2="1" y2="1"><stop stopColor="#55406a"/><stop offset="1" stopColor="#1c2430"/></linearGradient>
-            <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-          </defs>
-          <path d="M500 80 L950 320 L500 680 L50 320Z" fill="url(#ground)" stroke="#a7ff1944" strokeWidth="2"/>
-          <path d="M500 155 L880 355 L500 570 L120 355Z" fill="#18221e" stroke="#49603b" strokeWidth="2"/>
-          <path d="M500 80 L500 680 M50 320 L950 320 M120 355 L500 570 L880 355 M500 155 L120 355" stroke="#a7ff1927" strokeWidth="2" strokeDasharray="8 12"/>
-          <path d="M500 180 L500 610 M150 355 L850 355" stroke="url(#road)" strokeWidth="74" fill="none"/>
-          <path d="M500 180 L500 610 M150 355 L850 355" stroke="#a7ff1970" strokeWidth="2" strokeDasharray="13 16" fill="none"/>
-          <path d="M500 180 L500 610 M150 355 L850 355" stroke="#e2d85c22" strokeWidth="36" fill="none"/>
-          {Array.from({length:16},(_,i)=><circle key={i} cx={90+(i*53)%820} cy={170+(i*79)%470} r={i%3===0?5:2.5} fill={i%2?"#b5ff43":"#a45cff"} opacity=".7"/>)}
-          <g opacity=".8"><path d="M90 280 l40 -22 0 55 -40 22z M820 215 l55 -30 0 70 -55 30z M750 510 l42 -24 0 54 -42 24z" fill="#303947" stroke="#a7ff1977"/><path d="M90 280 l40 -22 M820 215 l55 -30 M750 510 l42 -24" stroke="#c9ff4d" strokeWidth="3"/></g>
-          {places.map(p=><g key={p.name} data-place="true" className="world-building" role="button" tabIndex={0} aria-label={`Enter ${p.name}`} onClick={()=>{setSelected(p.name);onEnter(p.page);}} onKeyDown={e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();setSelected(p.name);onEnter(p.page);}}} transform={`translate(${p.x} ${p.y})`}>
-            <ellipse cx="0" cy="22" rx="85" ry="28" fill={p.color} opacity=".13" filter="url(#glow)"/>
-            {p.kind==="tower" ? <><path d="M-48 8 L-38 -130 L0 -158 L38 -130 L48 8Z" fill="url(#tower)" stroke={p.color} strokeWidth="2"/><path d="M-38 -130 L0 -158 L38 -130 L0 -105Z" fill="#a77bd0"/><path d="M-38 -130 L-38 8 M0 -105 L0 8 M38 -130 L38 8" stroke={p.color} opacity=".7"/><path d="M-24 -75 H24 M-26 -35 H26" stroke={p.color} strokeWidth="5" filter="url(#glow)"/></>
-            : <><path d="M-65 -4 L-65 -72 L0 -108 L65 -72 L65 -4 L0 34Z" fill="#252b35" stroke={p.color} strokeWidth="2"/><path d="M-65 -72 L0 -108 L65 -72 L0 -34Z" fill="#53604e"/><path d="M0 -34 L65 -72 L65 -4 L0 34Z" fill="#161e27"/><path d="M-65 -72 L0 -34 L0 34 L-65 -4Z" fill="#333d3b"/><path d="M-38 -64 L0 -86 L38 -64 L0 -43Z" fill={p.color} opacity=".65"/><path d="M-45 -2 V-45 L-25 -56 V-12 M14 -16 V-49 L34 -60 V-27" stroke={p.color} strokeWidth="4" filter="url(#glow)"/></>}
-            <path d="M-70 13 L0 53 L70 13 L0 -27Z" fill="#0d1117" stroke={p.color} strokeWidth="1.5"/>
-            <path d="M-70 13 L0 53 L0 65 L-70 25Z M0 53 L70 13 L70 25 L0 65Z" fill="#303842" stroke={p.color} strokeWidth=".7"/>
-            <rect x="-58" y="-123" width="116" height="24" rx="3" fill="#080b10" stroke={p.color}/>
-            <text x="0" y="-107" textAnchor="middle" fill={p.color} fontSize="10" fontWeight="bold" letterSpacing="1.1">{p.name}</text>
-            <circle cx="0" cy="0" r="5" fill={p.color} filter="url(#glow)"/>
-            <path d="M0 55 V78" stroke={p.color} strokeDasharray="3 4" opacity=".7"/>
-          </g>)}
-          <g transform="translate(500 350)"><circle r="22" fill="#d5ff321a" stroke="#d5ff32" strokeWidth="1.5"/><circle r="6" fill="#d5ff32" filter="url(#glow)"/><path d="M0 -35 V-23 M0 23 V35 M-35 0 H-23 M23 0 H35" stroke="#d5ff32" strokeWidth="2"/></g>
-          <text x="500" y="690" textAnchor="middle" fill="#b6ca9d" fontSize="10" letterSpacing="4">PUKE TOWN CENTRAL GRID · MAP DATA V1</text>
-        </g>
-      </svg>
-      <div className="world-map-label">DRAG TO PAN <span>·</span> TAP A BUILDING TO ENTER</div>
-      <div className="world-zoom"><button onClick={()=>setZoom(z=>Math.min(1.45,z+.1))} aria-label="Zoom in">+</button><button onClick={()=>setZoom(z=>Math.max(.75,z-.1))} aria-label="Zoom out">−</button><button onClick={()=>{setZoom(1);setOffset({x:0,y:0});}} aria-label="Reset map">⌖</button></div>
-      <div className="world-coordinates"><span>MAP / PT-01</span><span>8 DISTRICTS DISCOVERED</span></div>
-    </div>
-    <div className="world-bottom"><div><span className="world-kicker">CURRENT LOCATION</span><strong>{selected}</strong></div><div className="world-quicklinks">{places.slice(0,4).map(p=><button key={p.name} onClick={()=>{setSelected(p.name);onEnter(p.page);}}>{p.name}</button>)}</div></div>
-  </section>;
+  const topNav = [
+    { name: "Home", page: "Dashboard", x: 2, w: 12 },
+    { name: "Games Arena", page: "My consoles", x: 14, w: 13 },
+    { name: "Challenges", page: "Challenges", x: 27, w: 13 },
+    { name: "Leaderboards", page: "Leaderboards", x: 40, w: 13 },
+    { name: "Rewards", page: "Rewards shop", x: 53, w: 12 },
+    { name: "Marketplace", page: "Rewards shop", x: 65, w: 14 },
+    { name: "AI Lab", page: "Challenges", x: 79, w: 10 },
+    { name: "Esports", page: "Leaderboards", x: 89, w: 10 }
+  ];
+  return (
+    <section className="world-screen artwork-world" aria-label="Puke Town interactive home">
+      <div className="artwork-frame">
+        <img className="town-artwork" src="/images/puketown-neon-hub.png" alt="Puke Town Gaming neon city hub with gaming districts and navigation" />
+        <div className="artwork-hotspots" aria-label="Town navigation">
+          {topNav.map(item => <button key={item.name} className="artwork-hotspot top-nav-hotspot" style={{ left: item.x + "%", width: item.w + "%" }} type="button" aria-label={"Open " + item.name} onClick={() => onEnter(item.page)} />)}
+          {places.map(item => <button key={item.name} className="artwork-hotspot" style={{ left: item.x + "%", top: item.y + "%", width: item.w + "%", height: item.h + "%" }} type="button" aria-label={"Open " + item.name} title={item.name} onClick={() => onEnter(item.page)} />)}
+          <button className="artwork-hotspot notification-hotspot" type="button" aria-label="Open notifications" onClick={() => onEnter("Gaming activity")} />
+          <button className="artwork-hotspot settings-hotspot" type="button" aria-label="Open profile and settings" onClick={() => onEnter("Profile")} />
+        </div>
+      </div>
+      <div className="artwork-caption"><span><i /> TOWN NETWORK ONLINE</span><span>Welcome back, {playerName}</span><span>Tap a district to enter</span></div>
+    </section>
+  );
 }
 
 export default function App() {
