@@ -129,3 +129,38 @@ button{font:inherit}.app-shell{min-height:100vh}.sidebar{width:246px;position:fi
 .leaderboard-note strong{color:#d7f8d0;font-size:16px}
 .leaderboard-note p{color:#9ba89a;font-size:14px;line-height:1.45;margin:4px 0 0}
 @media(max-width:700px){.leaderboard-summary{grid-template-columns:1fr}.leaderboard-controls{align-items:stretch}.leaderboard-controls select{width:100%}.leaderboard-tabs button{flex:1}}
+
+/* Puke Town immersive district layer */
+body{background:#080910;color:#f3f3f7}
+.app-shell{background:radial-gradient(ellipse at 55% -10%,#8b38b52b,transparent 45%),#080910}
+.sidebar{background:linear-gradient(180deg,#11101b,#080a10);border-color:#a7ff1933}
+.brand-mark{background:linear-gradient(145deg,#d5ff32,#62c915);box-shadow:0 0 22px #a7ff1955}
+.nav-item.active{color:#d5ff32;background:linear-gradient(90deg,#a7ff191c,#a855f70d);border-color:#a7ff1955;box-shadow:inset 3px 0 #d5ff32}
+.topbar{background:#0b0c14ed;border-color:#a7ff192b}
+.page-content{max-width:1600px}
+.town-hero{height:390px;margin:0 -42px 24px;position:relative;overflow:hidden;border-bottom:1px solid #a7ff1960;background:#0c0d17 url('/puke-town-world.svg') center 52%/cover no-repeat}
+.town-hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#080910ef 0%,#080910a8 43%,#08091012 100%),linear-gradient(0deg,#080910a8,transparent 45%)}
+.town-hero-content{position:relative;z-index:1;padding:75px 5%;max-width:690px}
+.town-hero h1{font:900 clamp(34px,5vw,62px) Orbitron;letter-spacing:-2px;margin:17px 0 10px;color:#fff;text-shadow:0 5px 25px #000}
+.town-hero h1 em{font-style:normal;color:#d5ff32;text-shadow:0 0 24px #a7ff1988}
+.town-hero p{font-size:18px;line-height:1.4;color:#dedee8;max-width:430px}
+.town-hero button{display:inline-flex;align-items:center;gap:8px;margin-top:17px;padding:13px 16px;background:linear-gradient(100deg,#a7ff19,#d5ff32);border:1px solid #eaff9c;color:#10120b;font:800 10px 'Share Tech Mono';cursor:pointer;box-shadow:0 0 22px #a7ff1944}
+.town-hero-stamp{position:absolute;right:5%;top:36px;width:100px;height:100px;display:grid;place-content:center;text-align:center;border:1px solid #d5ff3288;background:#11101dcc;color:#d5ff32;font:900 32px Orbitron;transform:rotate(8deg);box-shadow:0 0 30px #a7ff1922}
+.town-hero-stamp small{font:7px 'Share Tech Mono';color:#fff;max-width:75px}
+.district-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 14px}
+.district-heading h2{font:700 22px Orbitron;margin:7px 0;color:#f3f3f7}
+.district-live{font:8px 'Share Tech Mono';letter-spacing:1px;color:#c6ff48;border:1px solid #a7ff1944;padding:9px}
+.district-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.district-card{position:relative;min-height:165px;padding:20px 14px 12px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:7px;overflow:hidden;border:1px solid #494057;background:radial-gradient(ellipse at 50% 5%,#9b48d54d,transparent 65%),linear-gradient(145deg,#242033,#10121b 70%);color:#fff;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
+.district-card:before,.district-card:after{content:"";position:absolute;pointer-events:none;bottom:0;width:26%;height:52%;border:1px solid #a7ff1966;background:linear-gradient(180deg,#543b6c99,#171725);clip-path:polygon(15% 0,85% 0,100% 100%,0 100%);opacity:.65}
+.district-card:before{left:4%}.district-card:after{right:4%;height:66%;width:22%}
+.district-card:hover{transform:translateY(-4px);border-color:#d5ff32;box-shadow:0 10px 30px #a7ff1922}
+.district-symbol{position:relative;z-index:1;color:#d5ff32;font:44px Orbitron;text-shadow:0 0 18px #a7ff19;align-self:center;margin-bottom:10px}
+.district-card b,.district-card small,.district-enter{position:relative;z-index:1}
+.district-card b{font:700 10px Orbitron;letter-spacing:.3px}
+.district-card small{font-size:11px;color:#b4b2c2}
+.district-enter{font:7px 'Share Tech Mono';letter-spacing:1px;color:#c6ff48;margin-top:5px}
+.stat-card,.panel{background:linear-gradient(145deg,#191724,#0d1017);border-color:#393347}
+.panel h2{color:#f3f3f7}
+@media(max-width:1000px){.district-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.page-content{padding:25px 16px 18px}.town-hero{margin:0 -16px 20px;height:350px;background-position:57% center}.town-hero-content{padding:60px 20px}.town-hero h1{font-size:34px;letter-spacing:-1px}.town-hero p{font-size:15px;max-width:280px}.town-hero-stamp{right:13px;top:13px;width:70px;height:70px;font-size:22px}.town-hero-stamp small{font-size:5px}.district-heading{align-items:flex-start;flex-direction:column}.district-heading h2{font-size:18px}.district-grid{gap:8px}.district-card{min-height:145px;padding:12px 9px}.district-symbol{font-size:35px;margin-bottom:4px}.district-card b{font-size:8px}.district-card small{font-size:10px}.district-enter{font-size:6px}}
