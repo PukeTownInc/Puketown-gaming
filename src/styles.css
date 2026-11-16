@@ -25,3 +25,24 @@ button{font:inherit}.app-shell{min-height:100vh}.sidebar{width:246px;position:fi
 .profile-feedback{grid-column:1/-1}
 @media(max-width:850px){.profile-form{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.profile-form{grid-template-columns:1fr}}
+
+.console-hub{display:grid;gap:16px;margin-top:20px}
+.console-intro{padding:8px 0 4px}
+.console-intro h2{font:600 clamp(20px,2.4vw,28px) Orbitron;margin:9px 0;color:#eef5eb}
+.console-intro p{max-width:760px;color:#929e90;font-size:16px;line-height:1.5;margin:0}
+.console-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.console-card{padding:22px;display:flex;flex-direction:column;min-height:350px}
+.console-brand{display:flex;align-items:center;gap:13px;padding-bottom:18px;border-bottom:1px solid #252e25}
+.console-symbol{width:48px;height:48px;display:grid;place-items:center;font:700 17px Orbitron;border:1px solid #365b30;background:#142012;color:#a1ff8c}
+.ps-symbol{font-size:14px;color:#c4d8ff;border-color:#344665;background:#101827}
+.console-brand h3{font:700 21px Orbitron;margin:5px 0 0}
+.console-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:17px 0 9px}
+.status-pill{font:9px 'Share Tech Mono';letter-spacing:1px;padding:6px 8px;border:1px solid #574824;color:#e0c77e;background:#241d0e}
+.status-detail{font:11px 'Share Tech Mono';color:#899588}
+.console-card>p{color:#929e90;font-size:15px;line-height:1.45;margin:5px 0 12px}
+.console-card ul{padding-left:18px;margin:0 0 20px;color:#b4c0b0;font-size:14px;line-height:1.8}
+.console-disabled{margin-top:auto;width:100%;padding:12px 10px;border:1px solid #303b30;background:#151a15;color:#6f7c6d;font:9px 'Share Tech Mono';letter-spacing:.7px;cursor:not-allowed}
+.console-next{display:flex;align-items:flex-start;gap:13px;color:#9eff8b}
+.console-next strong{color:#d7f8d0;font-size:16px}
+.console-next p{color:#9ba89a;font-size:14px;line-height:1.45;margin:4px 0 0}
+@media(max-width:850px){.console-grid{grid-template-columns:1fr}.console-card{min-height:0}}
