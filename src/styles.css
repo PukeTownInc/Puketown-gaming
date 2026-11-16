@@ -73,3 +73,34 @@ button{font:inherit}.app-shell{min-height:100vh}.sidebar{width:246px;position:fi
 .verification-tag.verified{border-color:#285a27;background:#10200f;color:#a1ff8c}
 .verification-tag.rejected{border-color:#633232;background:#241010;color:#f09b9b}
 @media(max-width:700px){.activity-summary{grid-template-columns:1fr}.activity-record{align-items:flex-start}.activity-record-meta{white-space:normal;text-align:right}.activity-record-meta>span:first-child{max-width:110px}}
+
+
+.achievement-hub{display:grid;gap:16px;margin-top:20px}
+.achievement-intro{padding:8px 0 3px}
+.achievement-intro h2{font:600 clamp(20px,2.4vw,28px) Orbitron;margin:9px 0;color:#eef5eb}
+.achievement-intro p{max-width:800px;color:#929e90;font-size:15px;line-height:1.5;margin:0}
+.achievement-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.achievement-stat{padding:17px 19px;display:grid;gap:7px}
+.achievement-stat>span{font:9px 'Share Tech Mono';letter-spacing:1.2px;color:#899588}
+.achievement-stat>strong{font:700 28px Orbitron;color:#eaf4e7}
+.achievement-stat>small{font-size:12px;color:#74816f}
+.achievement-library{padding:21px}
+.achievement-controls{display:grid;grid-template-columns:1fr 210px;gap:10px;padding:16px 0}
+.achievement-controls input,.achievement-controls select{width:100%;min-width:0;background:#080c08;border:1px solid #303b30;color:#e8eee7;padding:11px 12px;font:14px Rajdhani;outline:none}
+.achievement-controls input:focus,.achievement-controls select:focus{border-color:#39ff14}
+.achievement-empty{padding:35px 14px;text-align:center;color:#929e90;font-size:14px;line-height:1.5}
+.achievement-empty h3{font:600 17px Orbitron;color:#e7efe4;margin:12px 0 7px}
+.achievement-empty p{max-width:560px;margin:0 auto}
+.achievement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.achievement-card{padding:17px;border:1px solid #283228;background:linear-gradient(145deg,#101510,#0b0f0b);min-width:0}
+.achievement-card.is-unlocked{border-color:#365a30}
+.achievement-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.achievement-medal{width:39px;height:39px;display:grid;place-items:center;color:#a1ff8c;background:#142012;border:1px solid #365b30}
+.achievement-card h3{font:600 15px Orbitron;color:#e8eee7;margin:13px 0 7px}
+.achievement-card>p{min-height:38px;color:#929e90;font-size:13px;line-height:1.4;margin:0 0 13px}
+.achievement-card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;border-top:1px solid #252e25;padding-top:11px}
+.achievement-card-foot span{font-size:11px;color:#899588;overflow-wrap:anywhere}
+.achievement-card-foot strong{font:10px 'Share Tech Mono';color:#baffad;white-space:nowrap}
+.achievement-date{display:block;color:#7f8d7c;font-size:11px;margin-top:8px}
+.verification-tag.locked{border-color:#303b30;background:#151a15;color:#899588}
+@media(max-width:700px){.achievement-summary{grid-template-columns:1fr}.achievement-controls{grid-template-columns:1fr}.achievement-grid{grid-template-columns:1fr}}
