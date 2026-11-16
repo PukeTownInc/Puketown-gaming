@@ -98,6 +98,54 @@ function AccountPanel() {
 export default function App() {
   const [active, setActive] = useState("Dashboard");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [playerData, setPlayerData] = useState({
+    signedIn: false,
+    displayName: "PLAYER PROFILE",
+    xp: 0,
+    rewardCredits: 0,
+    consoles: 0,
+    achievements: 0,
+    sessions: 0
+  });
+
+  useEffect(() => {
+    if (!supabase) return;
+
+    async function loadPlayer(user: any) {
+      if (!user) {
+        setPlayerData({
+          signedIn: false, displayName: "PLAYER PROFILE",
+          xp: 0, rewardCredits: 0, consoles: 0, achievements: 0, sessions: 0
+        });
+        return;
+      }
+
+      const [profile, xpWallet, rewardWallet, accounts, achievements, sessions] = await Promise.all([
+        supabase!.from("gaming_profiles").select("display_name, gamertag").eq("user_id", user.id).maybeSingle(),
+        supabase!.from("xp_wallets").select("balance").eq("user_id", user.id).maybeSingle(),
+        supabase!.from("reward_wallets").select("balance").eq("user_id", user.id).maybeSingle(),
+        supabase!.from("linked_accounts").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("connection_status", "active"),
+        supabase!.from("member_achievements").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("verification_status", "verified"),
+        supabase!.from("gaming_sessions").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("verification_status", "verified")
+      ]);
+
+      setPlayerData({
+        signedIn: true,
+        displayName: profile.data?.display_name || profile.data?.gamertag || user.user_metadata?.display_name || user.email || "PLAYER",
+        xp: Number(xpWallet.data?.balance || 0),
+        rewardCredits: Number(rewardWallet.data?.balance || 0),
+        consoles: accounts.count || 0,
+        achievements: achievements.count || 0,
+        sessions: sessions.count || 0
+      });
+    }
+
+    supabase.auth.getSession().then(({ data }) => loadPlayer(data.session?.user));
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      window.setTimeout(() => { void loadPlayer(session?.user); }, 0);
+    });
+    return () => data.subscription.unsubscribe();
+  }, []);
 
   return (
     <div className="app-shell">
@@ -134,7 +182,7 @@ export default function App() {
           <div className="page-heading">
             <div><h1>{active === "Dashboard" ? "Your gaming command centre." : active}</h1>
               <p>Track progress. Complete challenges. Build your player profile.</p></div>
-            <div className="player-chip"><div className="avatar">PT</div><div><strong>PLAYER PROFILE</strong><span>Not connected</span></div></div>
+            <div className="player-chip"><div className="avatar">PT</div><div><strong>{playerData.displayName}</strong><span>{playerData.signedIn ? "ACCOUNT CONNECTED" : "Not connected"}</span></div></div>
           </div>
 
           <div className="notice">
@@ -144,10 +192,10 @@ export default function App() {
           </div>
 
           <AccountPanel />\n\n          <div className="stat-grid">
-            <article className="stat-card"><div className="stat-icon"><Trophy /></div><span>GAMING XP</span><strong>0 <small>XP</small></strong><p>Progression points only</p></article>
-            <article className="stat-card"><div className="stat-icon"><Wallet /></div><span>REWARD CREDITS</span><strong>0 <small>RC</small></strong><p>Redeemable balance</p></article>
-            <article className="stat-card"><div className="stat-icon"><Gamepad2 /></div><span>LINKED CONSOLES</span><strong>0</strong><p>Connections not enabled</p></article>
-            <article className="stat-card"><div className="stat-icon"><Award /></div><span>ACHIEVEMENTS</span><strong>0</strong><p>Verified unlocks</p></article>
+            <article className="stat-card"><div className="stat-icon"><Trophy /></div><span>GAMING XP</span><strong>{playerData.xp.toLocaleString()} <small>XP</small></strong><p>Progression points only</p></article>
+            <article className="stat-card"><div className="stat-icon"><Wallet /></div><span>REWARD CREDITS</span><strong>{playerData.rewardCredits.toLocaleString()} <small>RC</small></strong><p>Funded, redeemable balance</p></article>
+            <article className="stat-card"><div className="stat-icon"><Gamepad2 /></div><span>LINKED CONSOLES</span><strong>{playerData.consoles}</strong><p>Active connections</p></article>
+            <article className="stat-card"><div className="stat-icon"><Award /></div><span>ACHIEVEMENTS</span><strong>{playerData.achievements}</strong><p>Verified unlocks</p></article>
           </div>
 
           <div className="content-grid">
