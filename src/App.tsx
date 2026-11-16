@@ -252,6 +252,36 @@ export default function App() {
               <p>No console accounts, adverts or reward transactions are connected. This preview uses demonstration data only.</p></div>
           </div>
 
+          {active === "My consoles" ? (
+            <section className="console-hub">
+              <div className="console-intro">
+                <span className="panel-kicker">PLATFORM CONNECTIONS</span>
+                <h2>Bring your gaming accounts together.</h2>
+                <p>Connect supported gaming platforms to build one player profile. Connections are not available yet while provider access and commercial permissions are reviewed.</p>
+              </div>
+              <div className="console-grid">
+                <article className="panel console-card console-xbox">
+                  <div className="console-brand"><span className="console-symbol xbox-symbol">X</span><div><span className="panel-kicker">PRIORITY PLATFORM</span><h3>Xbox</h3></div></div>
+                  <div className="console-status"><span className="status-pill pending">NOT CONNECTED</span><span className="status-detail">Connection unavailable</span></div>
+                  <p>Xbox is the first planned platform. A supported and commercially approved data route must be confirmed before account linking can be enabled.</p>
+                  <ul><li>Player identity and gamertag</li><li>Supported achievement data</li><li>Eligible gaming activity data</li></ul>
+                  <button className="console-disabled" type="button" disabled>CONNECT XBOX — COMING LATER</button>
+                </article>
+                <article className="panel console-card console-playstation">
+                  <div className="console-brand"><span className="console-symbol ps-symbol">PS</span><div><span className="panel-kicker">SECOND PLATFORM</span><h3>PlayStation</h3></div></div>
+                  <div className="console-status"><span className="status-pill pending">NOT CONNECTED</span><span className="status-detail">Connection unavailable</span></div>
+                  <p>PlayStation is planned after the Xbox work. An official data access route and any required partner approval must be established first.</p>
+                  <ul><li>Player identity where permitted</li><li>Supported trophy data</li><li>Eligible gaming activity data</li></ul>
+                  <button className="console-disabled" type="button" disabled>CONNECT PLAYSTATION — COMING LATER</button>
+                </article>
+              </div>
+              <div className="panel console-next">
+                <ShieldCheck size={20} />
+                <div><strong>Why connections are not enabled</strong><p>No passwords or console credentials are collected by Puke Town Gaming. Account linking will only be introduced through an approved provider authorisation flow after access, privacy and commercial requirements are satisfied.</p></div>
+              </div>
+            </section>
+          ) : (
+            <>
           <AccountPanel />\n\n          <div className="stat-grid">
             <article className="stat-card"><div className="stat-icon"><Trophy /></div><span>GAMING XP</span><strong>{playerData.xp.toLocaleString()} <small>XP</small></strong><p>Progression points only</p></article>
             <article className="stat-card"><div className="stat-icon"><Wallet /></div><span>REWARD CREDITS</span><strong>{playerData.rewardCredits.toLocaleString()} <small>RC</small></strong><p>Funded, redeemable balance</p></article>
@@ -273,6 +303,9 @@ export default function App() {
               <div className="economy-note">Reward issuance remains switched off until funding, fraud controls and provider terms are approved.</div>
             </section>
           </div>
+
+            </>
+          )}
           <footer><span>PUKE TOWN GAMING</span><span>BUILT FOR PLAYERS · DESIGNED WITH CONTROL</span><span>{isSupabaseConfigured ? "BACKEND CONFIGURED" : "DEMO MODE"}</span></footer>
         </section>
       </main>
