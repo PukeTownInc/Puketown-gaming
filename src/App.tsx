@@ -22,9 +22,12 @@ function AccountPanel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
+  const [gamertag, setGamertag] = useState("");
   const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [busy, setBusy] = useState(false);
+  const [profileBusy, setProfileBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [profileMessage, setProfileMessage] = useState("");
 
   useEffect(() => {
     if (!supabase) return;
@@ -32,6 +35,27 @@ function AccountPanel() {
     const { data } = supabase.auth.onAuthStateChange((_event, next) => setSession(next));
     return () => data.subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!supabase || !session?.user) {
+      setDisplayName("");
+      setGamertag("");
+      return;
+    }
+    let active = true;
+    supabase.from("gaming_profiles").select("display_name, gamertag")
+      .eq("user_id", session.user.id).maybeSingle()
+      .then(({ data, error }) => {
+        if (!active) return;
+        if (error) {
+          setProfileMessage("Could not load your player profile. Please refresh and try again.");
+          return;
+        }
+        setDisplayName(data?.display_name || session.user.user_metadata?.display_name || "");
+        setGamertag(data?.gamertag || "");
+      });
+    return () => { active = false; };
+  }, [session]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -59,6 +83,34 @@ function AccountPanel() {
     }
   }
 
+  async function saveProfile(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!supabase || !session?.user) return;
+    const cleanName = displayName.trim();
+    const cleanGamertag = gamertag.trim();
+    if (!cleanName) {
+      setProfileMessage("Enter a player name before saving.");
+      return;
+    }
+    setProfileBusy(true);
+    setProfileMessage("");
+    try {
+      const { error } = await supabase.from("gaming_profiles")
+        .update({ display_name: cleanName, gamertag: cleanGamertag || null })
+        .eq("user_id", session.user.id);
+      if (error) throw error;
+      const { error: metadataError } = await supabase.auth.updateUser({
+        data: { display_name: cleanName }
+      });
+      if (metadataError) throw metadataError;
+      setProfileMessage("Player profile saved.");
+    } catch (error) {
+      setProfileMessage(error instanceof Error ? error.message : "Could not save your profile.");
+    } finally {
+      setProfileBusy(false);
+    }
+  }
+
   async function signOut() {
     if (!supabase) return;
     const { error } = await supabase.auth.signOut();
@@ -68,15 +120,24 @@ function AccountPanel() {
   return (
     <section className="panel account-panel">
       <div className="panel-heading">
-        <div><span className="panel-kicker">PLAYER ACCOUNT</span><h2>{session ? "Your account" : "Create your player account"}</h2></div>
+        <div><span className="panel-kicker">PLAYER ACCOUNT</span><h2>{session ? "Profile & account settings" : "Create your player account"}</h2></div>
         <CircleUserRound size={21} />
       </div>
       {!isSupabaseConfigured ? (
         <p className="account-message">Account services are unavailable until Supabase environment variables are configured.</p>
       ) : session ? (
-        <div className="account-signed-in">
-          <div><strong>{session.user.user_metadata?.display_name || session.user.email}</strong><p>{session.user.email}</p><small>Your player profile is linked to this account.</small></div>
-          <button className="account-submit" onClick={signOut}>SIGN OUT</button>
+        <div className="profile-settings">
+          <form className="profile-form" onSubmit={saveProfile}>
+            <label>PLAYER NAME<input value={displayName} onChange={e => setDisplayName(e.target.value)} placeholder="Your display name" maxLength={40} required /></label>
+            <label>GAMERTAG <span className="optional-label">OPTIONAL</span><input value={gamertag} onChange={e => setGamertag(e.target.value)} placeholder="Your console gamertag" maxLength={40} /></label>
+            <label>ACCOUNT EMAIL<input value={session.user.email || ""} readOnly aria-readonly="true" /></label>
+            <div className="profile-actions">
+              <button className="account-submit" type="submit" disabled={profileBusy}>{profileBusy ? "SAVING..." : "SAVE PROFILE"}</button>
+              <button className="account-switch" type="button" onClick={signOut}>SIGN OUT</button>
+            </div>
+            {profileMessage && <p className="account-message profile-feedback" role="status">{profileMessage}</p>}
+          </form>
+          <small className="account-footnote">Your email is read-only here. Console connections and reward features remain disabled.</small>
         </div>
       ) : (
         <form className="account-form" onSubmit={submit}>
