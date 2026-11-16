@@ -104,3 +104,28 @@ button{font:inherit}.app-shell{min-height:100vh}.sidebar{width:246px;position:fi
 .achievement-date{display:block;color:#7f8d7c;font-size:11px;margin-top:8px}
 .verification-tag.locked{border-color:#303b30;background:#151a15;color:#899588}
 @media(max-width:700px){.achievement-summary{grid-template-columns:1fr}.achievement-controls{grid-template-columns:1fr}.achievement-grid{grid-template-columns:1fr}}
+
+
+.leaderboard-hub{display:grid;gap:16px;margin-top:20px}
+.leaderboard-intro{padding:8px 0 3px}
+.leaderboard-intro h2{font:600 clamp(20px,2.4vw,28px) Orbitron;margin:9px 0;color:#eef5eb}
+.leaderboard-intro p{max-width:800px;color:#929e90;font-size:15px;line-height:1.5;margin:0}
+.leaderboard-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.leaderboard-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.leaderboard-tabs button{padding:10px 13px;border:1px solid #303b30;background:#101510;color:#929e90;font:9px 'Share Tech Mono';letter-spacing:.7px;cursor:pointer}
+.leaderboard-tabs button.selected{border-color:#39ff14;background:#142012;color:#baffad}
+.leaderboard-controls select{background:#080c08;border:1px solid #303b30;color:#e8eee7;padding:10px 12px;font:13px Rajdhani}
+.leaderboard-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.leaderboard-stat{padding:17px 19px;display:grid;gap:7px}
+.leaderboard-stat>span{font:9px 'Share Tech Mono';letter-spacing:1.2px;color:#899588}
+.leaderboard-stat>strong{font:700 25px Orbitron;color:#eaf4e7}
+.leaderboard-stat>small{font-size:12px;color:#74816f}
+.leaderboard-table{padding:21px}
+.leaderboard-columns{display:flex;justify-content:space-between;gap:12px;padding:15px 4px;border-bottom:1px solid #303b30;color:#899588;font:9px 'Share Tech Mono';letter-spacing:1px}
+.leaderboard-empty{padding:36px 14px;text-align:center;color:#929e90;font-size:14px;line-height:1.5}
+.leaderboard-empty h3{font:600 17px Orbitron;color:#e7efe4;margin:12px 0 7px}
+.leaderboard-empty p{max-width:610px;margin:0 auto}
+.leaderboard-note{display:flex;align-items:flex-start;gap:13px;color:#9eff8b}
+.leaderboard-note strong{color:#d7f8d0;font-size:16px}
+.leaderboard-note p{color:#9ba89a;font-size:14px;line-height:1.45;margin:4px 0 0}
+@media(max-width:700px){.leaderboard-summary{grid-template-columns:1fr}.leaderboard-controls{align-items:stretch}.leaderboard-controls select{width:100%}.leaderboard-tabs button{flex:1}}
