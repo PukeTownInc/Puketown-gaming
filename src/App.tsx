@@ -17,6 +17,99 @@ const navigation = [
 ];
 
 
+function GamingActivityPanel() {
+  const [rows, setRows] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    async function loadActivity() {
+      setLoading(true);
+      setError("");
+      if (!supabase) {
+        if (active) { setSignedIn(false); setRows([]); setLoading(false); }
+        return;
+      }
+      const { data: authData, error: authError } = await supabase.auth.getSession();
+      if (!active) return;
+      if (authError) {
+        setError("Could not check your account session. Please refresh and try again.");
+        setRows([]);
+        setLoading(false);
+        return;
+      }
+      const user = authData.session?.user;
+      setSignedIn(Boolean(user));
+      if (!user) {
+        setRows([]);
+        setLoading(false);
+        return;
+      }
+      const { data, error: queryError } = await supabase
+        .from("gaming_sessions")
+        .select("id, started_at, ended_at, duration_seconds, verification_status, games(title, provider), linked_accounts(provider, display_name)")
+        .eq("user_id", user.id)
+        .order("started_at", { ascending: false, nullsFirst: false })
+        .limit(50);
+      if (!active) return;
+      if (queryError) {
+        setError("Activity could not be loaded. Only your own session records are accessible.");
+        setRows([]);
+      } else {
+        setRows(data || []);
+      }
+      setLoading(false);
+    }
+    void loadActivity();
+    return () => { active = false; };
+  }, []);
+
+  function formatDate(value?: string | null) {
+    if (!value) return "Time not recorded";
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? "Time unavailable" : date.toLocaleString();
+  }
+
+  function formatDuration(value?: number | null) {
+    if (value === null || value === undefined) return "Duration not recorded";
+    const minutes = Math.floor(value / 60);
+    if (minutes < 60) return `${minutes} min recorded`;
+    return `${Math.floor(minutes / 60)} hr ${minutes % 60} min recorded`;
+  }
+
+  return (
+    <section className="activity-hub">
+      <div className="activity-intro">
+        <span className="panel-kicker">PLAYER SESSION HISTORY</span>
+        <h2>Your gaming activity.</h2>
+        <p>Sessions appear here only when a supported source records them. Verification status is shown separately; an unverified record is not proof of playtime or reward eligibility.</p>
+      </div>
+      <div className="activity-summary">
+        <article className="panel activity-stat"><span>RECORDED SESSIONS</span><strong>{rows.length}</strong><small>Latest 50 records</small></article>
+        <article className="panel activity-stat"><span>VERIFIED SESSIONS</span><strong>{rows.filter(row => row.verification_status === "verified").length}</strong><small>Provider-verified only</small></article>
+        <article className="panel activity-stat"><span>CONNECTED SOURCES</span><strong>0</strong><small>Integrations not enabled</small></article>
+      </div>
+      <section className="panel activity-list">
+        <div className="panel-heading"><div><span className="panel-kicker">RECENT HISTORY</span><h2>Session records</h2></div><Activity size={20} /></div>
+        {loading ? <div className="activity-empty">Loading your session history…</div>
+          : error ? <div className="activity-empty" role="status">{error}</div>
+          : !signedIn ? <div className="activity-empty"><h3>Sign in to view your activity</h3><p>Your private session history will appear here after you sign in.</p></div>
+          : rows.length === 0 ? <div className="activity-empty"><div className="empty-icon"><Gamepad2 size={25} /></div><h3>No gaming sessions recorded yet</h3><p>Your history is currently empty. Console and Steam integrations are not connected, so no playtime is being collected.</p></div>
+          : <div className="activity-records">{rows.map(row => {
+              const game = Array.isArray(row.games) ? row.games[0] : row.games;
+              const account = Array.isArray(row.linked_accounts) ? row.linked_accounts[0] : row.linked_accounts;
+              return <article className="activity-record" key={row.id}>
+                <div className="activity-record-main"><strong>{game?.title || "Game not identified"}</strong><span>{account?.display_name || account?.provider || game?.provider || "Platform not recorded"}</span><small>{formatDate(row.started_at)}</small></div>
+                <div className="activity-record-meta"><span>{formatDuration(row.duration_seconds)}</span><span className={`verification-tag ${row.verification_status}`}>{row.verification_status || "unverified"}</span></div>
+              </article>;
+            })}</div>}
+      </section>
+    </section>
+  );
+}
+
 function AccountPanel() {
   const [session, setSession] = useState<any>(null);
   const [email, setEmail] = useState("");
@@ -252,7 +345,9 @@ export default function App() {
               <p>No console accounts, adverts or reward transactions are connected. This preview uses demonstration data only.</p></div>
           </div>
 
-          {active === "My consoles" ? (
+          {active === "Gaming activity" ? (
+            <GamingActivityPanel />
+          ) : active === "My consoles" ? (
             <section className="console-hub">
               <div className="console-intro">
                 <span className="panel-kicker">PLATFORM CONNECTIONS</span>
