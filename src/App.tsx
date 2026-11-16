@@ -110,6 +110,111 @@ function GamingActivityPanel() {
   );
 }
 
+function AchievementsPanel() {
+  const [rows, setRows] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [signedIn, setSignedIn] = useState(false);
+  const [error, setError] = useState("");
+  const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    let active = true;
+    async function loadAchievements() {
+      if (!supabase) {
+        if (active) { setSignedIn(false); setRows([]); setLoading(false); }
+        return;
+      }
+      const { data: authData, error: authError } = await supabase.auth.getSession();
+      if (!active) return;
+      if (authError) {
+        setError("Could not check your account session. Please refresh and try again.");
+        setLoading(false);
+        return;
+      }
+      const user = authData.session?.user;
+      setSignedIn(Boolean(user));
+      if (!user) {
+        setRows([]);
+        setLoading(false);
+        return;
+      }
+      const { data, error: queryError } = await supabase
+        .from("achievements")
+        .select("id, provider_achievement_id, title, description, points, games(title, provider), member_achievements(id, unlocked_at, verification_status)")
+        .order("title", { ascending: true })
+        .limit(250);
+      if (!active) return;
+      if (queryError) {
+        setError("The achievement catalogue could not be loaded. Please try again later.");
+        setRows([]);
+      } else {
+        setRows(data || []);
+      }
+      setLoading(false);
+    }
+    void loadAchievements();
+    return () => { active = false; };
+  }, []);
+
+  const catalogue = rows.map(row => {
+    const game = Array.isArray(row.games) ? row.games[0] : row.games;
+    const unlocks = Array.isArray(row.member_achievements) ? row.member_achievements : [];
+    return { ...row, game, unlock: unlocks[0] || null };
+  });
+  const unlocked = catalogue.filter(row => row.unlock);
+  const verified = unlocked.filter(row => row.unlock?.verification_status === "verified");
+  const visible = catalogue.filter(row => {
+    const matchesFilter = filter === "all" ||
+      (filter === "unlocked" && Boolean(row.unlock)) ||
+      (filter === "locked" && !row.unlock) ||
+      (filter === "verified" && row.unlock?.verification_status === "verified");
+    const haystack = `${row.title} ${row.description || ""} ${row.game?.title || ""} ${row.game?.provider || ""}`.toLowerCase();
+    return matchesFilter && haystack.includes(search.toLowerCase().trim());
+  });
+
+  return (
+    <section className="achievement-hub">
+      <div className="achievement-intro">
+        <span className="panel-kicker">PLAYER PROGRESSION</span>
+        <h2>Achievements & unlocks.</h2>
+        <p>Browse the achievement catalogue and see your unlock records. An unlock is only marked verified when its recorded verification status is verified.</p>
+      </div>
+      <div className="achievement-summary">
+        <article className="panel achievement-stat"><span>CATALOGUE</span><strong>{catalogue.length}</strong><small>Available achievement records</small></article>
+        <article className="panel achievement-stat"><span>UNLOCKED</span><strong>{unlocked.length}</strong><small>Your recorded unlocks</small></article>
+        <article className="panel achievement-stat"><span>VERIFIED</span><strong>{verified.length}</strong><small>Provider-verified unlocks</small></article>
+      </div>
+      <section className="panel achievement-library">
+        <div className="panel-heading"><div><span className="panel-kicker">ACHIEVEMENT LIBRARY</span><h2>Browse achievements</h2></div><Award size={20} /></div>
+        <div className="achievement-controls">
+          <input aria-label="Search achievements" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search games or achievements…" />
+          <select aria-label="Filter achievements" value={filter} onChange={event => setFilter(event.target.value)}>
+            <option value="all">All achievements</option>
+            <option value="unlocked">My unlocks</option>
+            <option value="verified">Verified unlocks</option>
+            <option value="locked">Not yet unlocked</option>
+          </select>
+        </div>
+        {loading ? <div className="achievement-empty">Loading achievement catalogue…</div>
+          : error ? <div className="achievement-empty" role="status">{error}</div>
+          : !signedIn ? <div className="achievement-empty"><h3>Sign in to view your achievements</h3><p>Your personal unlock history is private to your account.</p></div>
+          : catalogue.length === 0 ? <div className="achievement-empty"><div className="empty-icon"><Award size={25} /></div><h3>The achievement library is ready for data</h3><p>No game or achievement catalogue records have been added yet. Once supported provider data is available, games and their achievements will appear here. No sample unlocks have been invented.</p></div>
+          : visible.length === 0 ? <div className="achievement-empty"><h3>No matching achievements</h3><p>Try another search or change the filter.</p></div>
+          : <div className="achievement-grid">{visible.map(row => (
+              <article className={`achievement-card ${row.unlock ? "is-unlocked" : ""}`} key={row.id}>
+                <div className="achievement-card-top"><span className="achievement-medal"><Award size={21} /></span><span className={`verification-tag ${row.unlock?.verification_status || "locked"}`}>{row.unlock?.verification_status || "locked"}</span></div>
+                <h3>{row.title}</h3>
+                <p>{row.description || "No description supplied by the game catalogue."}</p>
+                <div className="achievement-card-foot"><span>{row.game?.title || "Game not specified"}{row.game?.provider ? ` · ${row.game.provider}` : ""}</span><strong>{row.points ?? 0} PTS</strong></div>
+                {row.unlock?.unlocked_at && <small className="achievement-date">Unlocked {new Date(row.unlock.unlocked_at).toLocaleDateString()}</small>}
+              </article>
+            ))}</div>}
+      </section>
+    </section>
+  );
+}
+
 function AccountPanel() {
   const [session, setSession] = useState<any>(null);
   const [email, setEmail] = useState("");
@@ -345,7 +450,9 @@ export default function App() {
               <p>No console accounts, adverts or reward transactions are connected. This preview uses demonstration data only.</p></div>
           </div>
 
-          {active === "Gaming activity" ? (
+          {active === "Achievements" ? (
+            <AchievementsPanel />
+          ) : active === "Gaming activity" ? (
             <GamingActivityPanel />
           ) : active === "My consoles" ? (
             <section className="console-hub">
