@@ -561,7 +561,7 @@ export default function App() {
             <ShieldCheck size={20} />
             <div><strong>Foundation mode — integrations are disabled</strong>
               <p>No console accounts, adverts or reward transactions are connected. This preview uses demonstration data only.</p></div>
-          </div>
+          </div>}
 
           {active === "Dashboard" ? (\n            <TownWorld onEnter={setActive} playerName={playerData.displayName} />\n          ) : active === "Leaderboards" ? (
             <LeaderboardsPanel />
