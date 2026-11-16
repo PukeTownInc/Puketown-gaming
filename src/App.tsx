@@ -432,7 +432,7 @@ function TownWorld({ onEnter, playerName }: { onEnter: (page: string) => void; p
   return (
     <section className="world-screen artwork-world" aria-label="Puke Town interactive home">
       <div className="artwork-frame">
-        <img className="town-artwork" src="/images/puketown-neon-hub.png" alt="Puke Town Gaming neon city hub with gaming districts and navigation" />
+        <img className="town-artwork" src="/file_0000000010148210831a166c8d49cfce.png" alt="Puke Town Gaming neon city hub with gaming districts and navigation" />
         <div className="artwork-hotspots" aria-label="Town navigation">
           {topNav.map(item => <button key={item.name} className="artwork-hotspot top-nav-hotspot" style={{ left: item.x + "%", width: item.w + "%" }} type="button" aria-label={"Open " + item.name} onClick={() => onEnter(item.page)} />)}
           {places.map(item => <button key={item.name} className="artwork-hotspot" style={{ left: item.x + "%", top: item.y + "%", width: item.w + "%", height: item.h + "%" }} type="button" aria-label={"Open " + item.name} title={item.name} onClick={() => onEnter(item.page)} />)}
