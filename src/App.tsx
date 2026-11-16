@@ -563,7 +563,9 @@ export default function App() {
               <p>No console accounts, adverts or reward transactions are connected. This preview uses demonstration data only.</p></div>
           </div>}
 
-          {active === "Dashboard" ? (\n            <TownWorld onEnter={setActive} playerName={playerData.displayName} />\n          ) : active === "Leaderboards" ? (
+          {active === "Dashboard" ? (
+            <TownWorld onEnter={setActive} playerName={playerData.displayName} />
+          ) : active === "Leaderboards" ? (
             <LeaderboardsPanel />
           ) : active === "Achievements" ? (
             <AchievementsPanel />
@@ -606,7 +608,9 @@ export default function App() {
             </section>
           ) : (
             <>
-          <AccountPanel />\n\n          <div className="stat-grid">
+          <AccountPanel />
+
+          <div className="stat-grid">
             <article className="stat-card"><div className="stat-icon"><Trophy /></div><span>GAMING XP</span><strong>{playerData.xp.toLocaleString()} <small>XP</small></strong><p>Progression points only</p></article>
             <article className="stat-card"><div className="stat-icon"><Wallet /></div><span>REWARD CREDITS</span><strong>{playerData.rewardCredits.toLocaleString()} <small>RC</small></strong><p>Funded, redeemable balance</p></article>
             <article className="stat-card"><div className="stat-icon"><Gamepad2 /></div><span>LINKED CONSOLES</span><strong>{playerData.consoles}</strong><p>Active connections</p></article>
